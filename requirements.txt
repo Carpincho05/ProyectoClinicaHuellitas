@@ -1,1 +1,1 @@
-# No hay dependencias externas. Tkinter y SQLite vienen con Python.
+# No hay dependencias externas. Tkinter y SQLite vienen con la instalación estándar de Python.

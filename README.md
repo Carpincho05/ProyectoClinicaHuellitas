@@ -1,41 +1,78 @@
-# Huellitas - Sistema de Gestión para Clínica Veterinaria
+# Huellitas Veterinaria – versión MVC
 
-Aplicación de escritorio desarrollada en Python con Tkinter y SQLite.
+Esta versión reorganiza el sistema en **Modelo–Vista–Controlador (MVC)**, conserva SQLite y corrige el problema al editar fechas y horas.
 
-## Requisitos
-- Windows 10/11
-- Python 3.10 o superior (Tkinter normalmente viene incluido)
-- No requiere instalar paquetes externos.
+## 1. Requisitos
 
-## Ejecutar
-1. Extrae la carpeta `Huellitas_Veterinaria`.
-2. Abre CMD o PowerShell dentro de esa carpeta.
-3. Ejecuta: `python main.py`
-4. Inicia sesión con:
+- Python 3.10 o superior.
+- Tkinter (normalmente se instala junto con Python).
+- SQLite (incluido en Python).
+- No necesita instalar paquetes externos.
+
+## 2. Cómo ejecutar
+
+1. Descomprime la carpeta `Huellitas_MVC`.
+2. Abre esa carpeta en Visual Studio Code, PyCharm o desde el Explorador de Windows.
+3. Abre una terminal dentro de `Huellitas_MVC`.
+4. Ejecuta:
+
+   ```powershell
+   python main.py
+   ```
+
+5. Accede con la cuenta inicial si la base de datos no tenía ya una cuenta de administrador:
    - Usuario: `admin`
    - Contraseña: `Huellitas2026!`
-5. Cambia la contraseña del administrador desde el módulo Empleados: edita el registro del administrador y escribe una contraseña nueva.
 
-## Módulos
-- Propietarios: alta, consulta, edición y eliminación.
-- Mascotas: registro relacionado con propietarios.
-- Citas: programación, consulta, modificación y cancelación; evita dos citas programadas para el mismo veterinario en la misma fecha y hora.
-- Consultas e historial: motivo, diagnóstico, observaciones y tratamiento.
-- Empleados: administración de personal y cuentas de acceso.
-- Pagos: registro de cobros por propietario y mascota.
+La base de datos que utiliza esta versión es `Huellitas_MVC/huellitas.db`.
 
-## Roles
-- Administrador: acceso a todos los módulos.
-- Recepcionista: propietarios, mascotas, citas y pagos.
-- Veterinario: mascotas, citas e historial clínico.
+## 3. Estructura MVC
 
-## Base de datos
-Al iniciar por primera vez se crea automáticamente `huellitas.db` en la misma carpeta.
-No borres ese archivo si deseas conservar los registros.
-Realiza copias de seguridad periódicas copiando `huellitas.db` con el programa cerrado.
+```text
+Huellitas_MVC/
+│   main.py
+│   huellitas.db
+│   README.md
+│   requirements.txt
+│
+├── models/
+│   ├── __init__.py
+│   ├── database.py
+│   └── modules.py
+│
+├── controllers/
+│   ├── __init__.py
+│   └── app_controller.py
+│
+└── views/
+    ├── __init__.py
+    └── main_window.py
+```
 
-## Notas importantes
-- Las fechas se escriben como AAAA-MM-DD (ejemplo: 2026-11-10).
-- Las horas se escriben como HH:MM (ejemplo: 14:30).
-- La cuenta inicial es de demostración académica. Cambia la contraseña antes de usar datos reales.
-- El sistema es una base funcional académica; antes de un despliegue comercial se recomienda añadir copias automáticas, auditoría, cifrado de base de datos y pruebas de aceptación.
+### Modelo (`models/`)
+
+- `database.py`: crea y administra la conexión SQLite, las tablas, las consultas y el hash de contraseñas.
+- `modules.py`: define los módulos, columnas y campos que muestran los formularios.
+
+### Vista (`views/`)
+
+- `main_window.py`: contiene las ventanas Tkinter, formularios, tablas, botones, menú y diseño adaptable. La vista solicita operaciones al controlador; no contiene consultas SQL de negocio.
+
+### Controlador (`controllers/`)
+
+- `app_controller.py`: valida credenciales, permisos, datos, fechas, horas, montos y conflictos de citas; coordina las operaciones entre la vista y el modelo.
+
+### Inicio (`main.py`)
+
+Crea el modelo de base de datos, el controlador y la ventana principal.
+
+
+## 4. Pruebas
+
+Desde la carpeta del proyecto ejecuta:
+
+```powershell
+python -m compileall -q .
+```
+
+La comprobación anterior verifica sintaxis. También se debe abrir la aplicación en Windows y probar inicio de sesión, altas, ediciones, eliminaciones y permisos con cuentas de cada rol. La interfaz gráfica no se puede certificar únicamente con la compilación de los archivos.
